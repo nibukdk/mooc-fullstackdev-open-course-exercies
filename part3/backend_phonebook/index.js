@@ -1,29 +1,12 @@
 const experss = require("express"),
+  cors = require("cors"),
   app = experss();
 
-var morgan = require("morgan");
+app.use(cors());
 
+app.use(experss.static("dist"));
 app.use(experss.json());
 
-// define new token
-morgan.token("body", (req) => {
-  return JSON.stringify(req.body);
-});
-
-app.use(
-  morgan(function (tokens, req, res) {
-    return [
-      tokens.method(req, res),
-      tokens.url(req, res),
-      tokens.status(req, res),
-      tokens.res(req, res, "content-length"),
-      "-",
-      tokens["response-time"](req, res),
-      "ms",
-      tokens["body"](req,res),
-    ].join(" ");
-  })
-);
 
 
 let contacts = [
@@ -107,7 +90,7 @@ app.get("/info", (req, res) => {
     );
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`App is running at port ${PORT}`));
 
 let generateId = () =>
