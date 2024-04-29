@@ -1,7 +1,30 @@
 const experss = require("express"),
   app = experss();
 
+var morgan = require("morgan");
+
 app.use(experss.json());
+
+// define new token
+morgan.token("body", (req) => {
+  return JSON.stringify(req.body);
+});
+
+app.use(
+  morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, "content-length"),
+      "-",
+      tokens["response-time"](req, res),
+      "ms",
+      tokens["body"](req,res),
+    ].join(" ");
+  })
+);
+
 
 let contacts = [
   {
@@ -31,6 +54,7 @@ app.get("/api/persons", (_, res) => res.json(contacts));
 app.get("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
   const person = contacts.find((p) => p.id === id);
+  console.log(person);
   if (person) {
     res.status(202).json(person);
   } else {
@@ -59,11 +83,9 @@ app.post("/api/persons/", (req, res) => {
       contacts.find((p) => p.name === body.name) ||
       contacts.find((p) => p.number === body.number)
     ) {
-      res
-        .status(404)
-        .json({
-          err: "Name or Phone number already exists. THey must be unique.",
-        });
+      res.status(404).json({
+        err: "Name or Phone number already exists. THey must be unique.",
+      });
       return;
     }
     const person = { id: generateId(), ...body };
