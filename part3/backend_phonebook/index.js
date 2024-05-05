@@ -34,14 +34,14 @@ app.delete("/api/persons/:id", (req, res, next) => {
 
 app.post("/api/persons/", (req, res, next) => {
   const body = req.body;
-  if (!body.name || !body.number) {
-    return res
-      .status(400)
-      .json({ message: "Name or Phone number is missing " });
-  }
+  // if (!body.name || !body.number) {
+  //   return res
+  //     .status(400)
+  //     .json({ message: "Name or Phone number is missing " });
+  // }
   const newContact = new Contact({
-    name: body.name,
-    number: Number(body.number),
+    name: body.name ?? "",
+    number: body.number ?? "",
   });
 
   newContact
@@ -52,17 +52,17 @@ app.post("/api/persons/", (req, res, next) => {
 
 app.put("/api/persons/:id", (req, res, next) => {
   const body = req.body;
-  if (!body.name || !body.number) {
-    return res
-      .status(400)
-      .json({ message: "Name or Phone number is missing " });
-  }
+
   const newContact = {
-    name: body.name,
-    number: Number(body.number),
+    name: body.name ?? "",
+    number: body.number ?? "",
   };
 
-  Contact.findByIdAndUpdate(req.params.id, newContact, { new: true })
+  Contact.findByIdAndUpdate(req.params.id, newContact, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
     .then((updatedContact) => res.status(202).json(updatedContact))
     .catch((e) => next(e));
 });
@@ -84,14 +84,10 @@ app.get("/info", (req, res, next) => {
 const errorHandler = (err, req, res, next) => {
   if (err.name === "CastError") {
     return res.status(400).send({ message: "malformatted id" });
-  }
-  if (err.name === "ValidationError") {
-    return res
-      .status(400)
-      .send({
-        message:
-          "The value provided for the phone number contains unsupported format",
-      });
+  } else if (err.name === "ValidationError") {
+    return res.status(400).send({
+      message: err.message,
+    });
   }
 
   //  else {
