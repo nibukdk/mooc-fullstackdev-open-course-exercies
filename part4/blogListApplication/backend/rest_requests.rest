@@ -1,0 +1,21 @@
+GET http://localhost:3001/api/blogs
+
+###
+GET http://localhost:3001/api/blogs/1
+
+###
+POST http://localhost:3001/api/blogs 
+Content-Type: application/json
+
+{"title": "Binary Search Algorithm",
+  "author": "Nibesh khadka",
+  "url": "https://google.com",
+  "likes": 30
+}
+
+
+### 
+DELETE  http://localhost:3001/api/blogs/2
+
+
+
