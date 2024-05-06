@@ -1,4 +1,5 @@
 import DeleteContacts from "./deleteButton";
+
 const Contacts = ({ contacts, deleteContactHandler }) => {
   const namesCollection = contacts
     .map((contact) => contact.name)

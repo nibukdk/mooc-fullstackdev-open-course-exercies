@@ -34,11 +34,7 @@ app.delete("/api/persons/:id", (req, res, next) => {
 
 app.post("/api/persons/", (req, res, next) => {
   const body = req.body;
-  // if (!body.name || !body.number) {
-  //   return res
-  //     .status(400)
-  //     .json({ message: "Name or Phone number is missing " });
-  // }
+
   const newContact = new Contact({
     name: body.name ?? "",
     number: body.number ?? "",
@@ -89,12 +85,6 @@ const errorHandler = (err, req, res, next) => {
       message: err.message,
     });
   }
-
-  //  else {
-  //   return res
-  //     .status(400)
-  //     .send({ message: "Something went wrong, reload and try again!" });
-  // }
 
   next(err);
 };

@@ -10,7 +10,6 @@ const createContact = async (newPerson) => {
 };
 
 const updateContact = async (id, newPerson) => {
-  console.log(`${BASE_URL}/${id}`);
   return axios.put(`${BASE_URL}/${id}`, newPerson).then((res) => res.data);
 };
 

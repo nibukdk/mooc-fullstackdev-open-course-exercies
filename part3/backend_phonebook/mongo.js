@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 require("dotenv").config();
 
-const password = process.argv[2];
 // const name = process.argv[3];
 // const number = process.argv[4];
 
@@ -12,7 +11,7 @@ mongoose.set("strictQuery", false);
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then((_) => {
     console.log("connected to MongoDB");
   })
   .catch((error) => {
@@ -34,7 +33,7 @@ const contactSchema = new mongoose.Schema({
         return /\d{3}-\d{7}/.test(v);
       },
       message: (props) =>
-        `${props.value} is not a valid phone number! It should be of total 11 length inlcuding (-) after first 3 digits.For instance, 123-4567891`,
+        `${props.value} is not a valid phone number! It should be of total 11 length inlcuding (- after first 3 digits.For instance, 123-4567891`,
     },
   },
 });

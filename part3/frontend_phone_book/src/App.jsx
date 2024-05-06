@@ -8,9 +8,9 @@ import Notifications from "./components/notifications";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [mathcingNumber, setMatchingNumber] = useState([]);
-  const [newName, setNewName] = useState("enter name");
+  const [newName, setNewName] = useState("");
   const [newFilterName, setNewFilterName] = useState("enter name to search");
-  const [newNumber, setNewNumber] = useState("enter number");
+  const [newNumber, setNewNumber] = useState("");
   const [showNotification, setShowNotification] = useState(false);
   const [notification, setNotification] = useState({
     type: null,
@@ -51,14 +51,16 @@ const App = () => {
           message: `Successfully created new contact`,
         });
         setShowNotification(true);
+        setNewName("");
+        setNewNumber("");
       })
       .catch((e) => {
-        setNotification({ type: "error", message: JSON.stringify(e) });
+        setNotification({
+          type: "error",
+          message: JSON.stringify(e.response.data.message),
+        });
         setShowNotification(true);
       });
-
-    setNewName("enter name here...");
-    setNewNumber("enter number here...");
   };
 
   const checkPerson = () => {
@@ -108,7 +110,7 @@ const App = () => {
   const onDeleteContactHandler = (id) => {
     const name = persons.find((p) => p.id === id).name;
     const newContacts = [...persons.filter((p) => p.id != id)];
-    
+
     if (window.confirm(`Delete ${name}?`)) {
       server
         .deleteContact(id)
@@ -148,9 +150,14 @@ const App = () => {
           message: `Successfully updated contact`,
         });
         setShowNotification(true);
+        setNewName("");
+        setNewNumber("");
       })
       .catch((e) => {
-        setNotification({ type: "error", message: JSON.stringify(e) });
+        setNotification({
+          type: "error",
+          message: JSON.stringify(e.response.data.message),
+        });
         setShowNotification(true);
       });
   };
